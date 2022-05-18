@@ -1,0 +1,6 @@
+"0","```r
+names(gapminder)
+
+```"
+"1","[1] \"country\"   \"continent\" \"year\"      \"lifeExp\"   \"pop\"       \"gdpPercap\"
+"
