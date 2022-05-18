@@ -1,14 +1,8 @@
 library(shiny)
-library(thematic)
-
-pacman::p_load('dplyr', 'tidyr', 'gapminder',
-               'ggplot2',  'ggalt',
-               'forcats', 'R.utils', 'png', 
-               'grid', 'ggpubr', 'scales',
-               'bbplot')
+library(gapminder)
+library(bbplot)
 
 year_range <- range(gapminder[["year"]])
-
 
 
 ui <- fluidPage(
