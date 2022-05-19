@@ -1,6 +1,7 @@
 library(shiny)
 library(gapminder)
 library(bbplot)
+library(tidyverse)
 
 year_range <- range(gapminder[["year"]])
 
