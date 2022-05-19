@@ -7,48 +7,38 @@ year_range <- range(gapminder[["year"]])
 
 
 ui <- fluidPage(
-    theme = bslib::bs_theme(bootswatch = "cerulean"),
+    theme = bslib::bs_theme(bootswatch = "cosmo"),
     
     
-      titlePanel(
-          h2("A visual Representation of Life Expectancy", align = "center")
-      ),
-    
-      br(),
-
-      fluidRow(
-        column(3, 
-               selectInput("continent", "Select A Continent",
-                           choices = unique(gapminder$continent))
+      sidebarLayout(
+        sidebarPanel(
+          selectInput("continent", "Select A Continent",
+                      choices = unique(gapminder$continent)),
+          
+          selectInput("country", "Select A Country",
+                      choices = NULL),
+          br(),
+          
+          sliderInput("year",
+                      "Select The Year Range:",
+                      min = year_range[[1]],
+                      max = year_range[[2]],
+                      value = c(year_range[[1]], year_range[[2]]),
+                      sep = "",
+                      step = 1)
+          
         ),
         
-        column(3, offset = 1,
-               selectInput("country", "Select A Country",
-                           choices = NULL),
-        ),
-        
-        column(3, offset = 1,
-               sliderInput("year",
-                           "Select The Year Range:",
-                           min = year_range[[1]],
-                           max = year_range[[2]],
-                           value = c(year_range[[1]], year_range[[2]]),
-                           sep = "",
-                           step = 1)
+        mainPanel(
+            plotOutput("plot")
         )
-      ),
-    
-      br(),
-
-
-       fluidRow(
-         column(11,
-                plotOutput("plot")
-         )
-       )
-
+      )
     
 )
+
+
+
+
 
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
