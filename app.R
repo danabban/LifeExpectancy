@@ -10,16 +10,11 @@ year_range <- range(gapminder[["year"]])
 
 
 ui <- bs4DashPage(
-  header = bs4DashNavbar(
-    title = bs4DashBrand(
-      title = "Life Expectancy",
-      color = "gray-dark"
-    )
-  ),
+  header = bs4DashNavbar(disable = TRUE),
   
   controlbar = bs4DashControlbar(
     id = "controlbar",
-    width = 300,
+    width = 250,
     overlay = FALSE,
     skin = "light",
     pinned = TRUE,
@@ -36,51 +31,38 @@ ui <- bs4DashPage(
         
         selectInput("country", "Select A Country",
                     choices = NULL),
-        br(),
-        
-        sliderInput("year",
-                    "Select The Year Range:",
-                    min = year_range[[1]],
-                    max = year_range[[2]],
-                    value = c(year_range[[1]], year_range[[2]]),
-                    sep = "",
-                    step = 1)
+
       )
     )
   ),
   
-  sidebar = bs4DashSidebar(
-    skin = "light",
-    status = "gray-dark",
-    elevation = 3,
-    collapsed = TRUE,
-    minified = FALSE,
-    
-    sidebarUserPanel(
-      name = "Visual Representation!"
-    ),
-    
-    br(),
-    
-    bs4SidebarMenu(
-      id = "sidebarmenu",
-      bs4SidebarMenuItem(
-        "Plot",
-        tabName = "plot"
-      )
-      
-    )
-    
-  ),
+  sidebar = bs4DashSidebar(disable = T),
   
   body = bs4DashBody(
-    
     fluidRow(
-      
-      plotOutput("plot")
-      
+      box(
+        height = "600px",
+        actionButton("updateyear", "Update Year"),
+        br(),
+        br(),
+        plotOutput("plot"),
+        width = 12,
+        sidebar = boxSidebar(
+          id = "plotsidebar",
+          width = 40,
+          background = "#333a40",
+          sliderInput("year",
+                      "Select The Year Range:",
+                      min = year_range[[1]],
+                      max = year_range[[2]],
+                      value = c(year_range[[1]], year_range[[2]]),
+                      sep = "",
+                      step = 1)
+        )
+      )
     )
   )
+  
 )
 
 
@@ -105,6 +87,10 @@ server <- function(input, output, session){
     continent_data() %>%
       filter(country == input$country
              & year >= input$year[[1]] & year <= input$year[[2]])
+  })
+  
+  observeEvent(input$updateyear,{
+    updateBoxSidebar("plotsidebar")
   })
   
   
